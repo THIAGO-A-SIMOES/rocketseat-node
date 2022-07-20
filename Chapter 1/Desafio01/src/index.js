@@ -27,13 +27,14 @@ app.post('/users', (request, response) => {
   if (alreadyExists){
     return response.status(400).json({ error: 'User already exists!'});
   }
-  users.push({
+  user =({
     id: uuidv4(),
     name,
     username,
     todos: []
   });
-  return response.status(201).json(users);
+  users.push(user);
+  return response.status(201).json(user);
 });
 
 app.get('/todos', checksExistsUserAccount, (request, response) => {

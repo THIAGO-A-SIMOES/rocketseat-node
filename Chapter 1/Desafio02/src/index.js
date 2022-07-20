@@ -13,7 +13,7 @@ function checksExistsUserAccount(request, response, next) {
   const { username } = request.headers;
   const user = users.find(user => user.username === username);
   if(!user) {
-    return response.status(400).json({ error: 'User not found!' });
+    return response.status(404).json({ error: 'User not found!' });
   }
   request.user = user;
   return next();
@@ -22,22 +22,22 @@ function checksExistsUserAccount(request, response, next) {
 function checksCreateTodosUserAvailability(request, response, next) {
   const { user } = request;
   if (!user.pro && user.todos.length >= 10){
-    return response.status(401).json({ error: 'User has reached the todo limit!'})
+    return response.status(403).json({ error: 'User has reached the todo limit!'})
   }
   return next();
 }
 
 function checksTodoExists(request, response, next) {
   const { username } = request.headers;
-  const { idTodo } = request.params;
+  const { id } = request.params;
   const user = users.find(user => user.username === username);
   if (!user) {
     return response.status(404).json({ error: 'User not found!' });
   }
-  if(!validate(idTodo)) {
+  if(!validate(id)) {
     return response.status(400).json({ error: 'Invalid id!' });
   }
-  const todo = user.todos.find(todo => todo.id === idTodo);
+  const todo = user.todos.find(todo => todo.id === id);
   if (!todo) {
     return response.status(404).json({ error: 'Todo not found!' });
   }
